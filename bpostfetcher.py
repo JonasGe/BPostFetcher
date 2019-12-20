@@ -1,7 +1,3 @@
-'''
-TODO: read .txt with trackingnumbers
-'''
-
 import requests, json, sys, getopt
 
 
