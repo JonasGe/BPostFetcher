@@ -1,7 +1,7 @@
 pipeline {
   agent {
     docker {
-      image 'frolvlad/alpine-python3'
+      image 'python:2-alpine'
     }
 
   }
