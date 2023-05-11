@@ -9,7 +9,7 @@ def main(argv):
     trackingnumber = ''
 
     try:
-        opts, args = getopt.getopt(argv, "ht:", ["trackingnr="])
+        opts, args = getopt.getopt(argv, 'ht:', ['trackingnr='])
     except getopt.GetoptError:
         print('bpostfetcher.py -t <trackingnumber>')
         sys.exit(2)
