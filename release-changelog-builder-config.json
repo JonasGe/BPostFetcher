@@ -11,20 +11,6 @@
       {
         "title": "## 🧪 Tests",
         "labels": ["test"]
-      },
-      {
-        "title": "## 🧪 Tests and some 🪄 Magic",
-        "labels": ["feature", "bug", "test"],
-        "exhaustive": true,
-        "exhaustive_rules": "false",
-        "empty_content": "- no matching PRs",
-        "rules": [
-          {
-            "pattern": "open",
-            "on_property": "status",
-            "flags": "gu"
-          }
-        ]
       }
     ],
     "ignore_labels": [
