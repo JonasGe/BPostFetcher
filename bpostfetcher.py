@@ -17,19 +17,19 @@ def main(argv):
         if opt == '-h':
             print('bpostfetcher.py -t <trackingnumber>')
             sys.exit()
-        elif opt in ("-t", "--trackingnr"):
+        elif opt in ('-t', '--trackingnr'):
             trackingnumber = arg
 
     url = 'https://track.bpost.be/btr/api/items?itemIdentifier=' + trackingnumber
     r = requests.get(url, allow_redirects=False, headers=headers)
     data = json.loads(r.content)
     if len(data['items']) == 0:
-        print("No data for trackingnumber...")
+        print('No data for trackingnumber...')
         sys.exit(2)
     processsteps = data['items'][0]['processOverview']['processSteps']
     for step in processsteps:
         if step['status'] == 'active':
-            print('Currently ' + step['label']['main'] + ' ' + step['label']['detail'])
+            print(f'Currently { step["label"]["main"] } { step["label"]["detail"] }')
 
 
 if __name__ == '__main__':  # pragma: no cover
