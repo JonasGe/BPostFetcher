@@ -6,7 +6,7 @@
       },
       {
         "title": "## 🐛 Fixes",
-        "labels": ["bugfix"]
+        "labels": ["bug"]
       },
       {
         "title": "## 🧪 Tests",
@@ -14,7 +14,7 @@
       },
       {
         "title": "## 🧪 Tests and some 🪄 Magic",
-        "labels": ["feature", "bugfix", "test"],
+        "labels": ["feature", "bug", "test"],
         "exhaustive": true,
         "exhaustive_rules": "false",
         "empty_content": "- no matching PRs",
