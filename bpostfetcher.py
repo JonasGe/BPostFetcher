@@ -1,36 +1,54 @@
-import requests, json, sys, getopt
+import sys
+import getopt
+import requests
+import json
+from rich.console import Console
+from rich.table import Table
+from rich import box
 
 
 def main(argv):
-
+    console = Console()
     headers = {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'
     }
     trackingnumber = ''
+    postalcode = ''
 
     try:
-        opts, args = getopt.getopt(argv, 'ht:', ['trackingnr='])
+        opts, args = getopt.getopt(argv, 'ht:p:', ['trackingnr=', 'postalcode='])
     except getopt.GetoptError:
-        print('bpostfetcher.py -t <trackingnumber>')
+        console.print('[red]Error:[/red] bpostfetcher.py -t <trackingnumber> -p <postalcode>')
         sys.exit(2)
     for opt, arg in opts:
         if opt == '-h':
-            print('bpostfetcher.py -t <trackingnumber>')
+            console.print('bpostfetcher.py -t <trackingnumber> -p <postalcode>')
             sys.exit()
         elif opt in ('-t', '--trackingnr'):
             trackingnumber = arg
+        elif opt in ('-p', '--postalcode'):
+            postalcode = arg
 
-    url = 'https://track.bpost.be/btr/api/items?itemIdentifier=' + trackingnumber
+    if not postalcode:
+        console.print('[red]Error:[/red] Please enter a postal code with the -p flag')
+        sys.exit(2)
+
+    url = f'https://track.bpost.cloud/track/items?itemIdentifier={trackingnumber}&postalCode={postalcode}'
     r = requests.get(url, allow_redirects=False, headers=headers)
     data = json.loads(r.content)
     if len(data['items']) == 0:
-        print('No data for trackingnumber...')
+        console.print(f'[red]Error:[/red] No data for trackingnumber {trackingnumber}')
         sys.exit(2)
-    processsteps = data['items'][0]['processOverview']['processSteps']
-    for step in processsteps:
-        if step['status'] == 'active':
-            print(f'Currently { step["label"]["main"] } { step["label"]["detail"] }')
 
+    events = data['items'][0]['events']
+    events = sorted(events, key=lambda x: x['date'] + x['time'], reverse=False)
+    table = Table(title=f'Tracking information for {trackingnumber}', box=box.SIMPLE_HEAVY)
+    table.add_column('Date', style='cyan')
+    table.add_column('Time', style='magenta')
+    table.add_column('Event', style='green')
+    for event in events:
+        table.add_row(event['date'], event['time'], event['key']['NL']['description'])
+    console.print(table)
 
-if __name__ == '__main__':  # pragma: no cover
+if __name__ == '__main__':
     main(sys.argv[1:])
